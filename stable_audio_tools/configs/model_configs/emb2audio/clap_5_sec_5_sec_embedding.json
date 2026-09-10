@@ -1,0 +1,116 @@
+{
+  "model_type": "diffusion_cond",
+  "sample_size": 221184,
+  "sample_rate": 44100,
+  "audio_channels": 2,
+
+  "model": {
+    "pretransform": {
+      "type": "autoencoder",
+      "iterate_batch": true,
+      "config": {
+        "encoder": {
+          "type": "oobleck",
+          "requires_grad": false,
+          "config": {
+            "in_channels": 2,
+            "channels": 128,
+            "c_mults": [1, 2, 4, 8, 16],
+            "strides": [2, 4, 4, 8, 8],
+            "latent_dim": 128,
+            "use_snake": true
+          }
+        },
+        "decoder": {
+          "type": "oobleck",
+          "config": {
+            "out_channels": 2,
+            "channels": 128,
+            "c_mults": [1, 2, 4, 8, 16],
+            "strides": [2, 4, 4, 8, 8],
+            "latent_dim": 64,
+            "use_snake": true,
+            "final_tanh": false
+          }
+        },
+        "bottleneck": { "type": "vae" },
+        "latent_dim": 64,
+        "downsampling_ratio": 2048,
+        "io_channels": 2
+      }
+    },
+
+    "conditioning": {
+      "configs": [
+        {
+          "id": "clap",
+          "type": "sequence_embedding",
+          "config": {
+            "in_dim": 512,
+            "output_dim": 768,
+            "project_out": true,
+            "max_length": 1,
+            "l2_norm": false,
+            "layer_norm": false,
+            "use_abs_pos_emb": true,
+            "pos_emb_max_length": 1,
+            "small_init_proj_out": true,
+            "proj_out_init_std": 1e-3
+          }
+        }
+      ],
+      "cond_dim": 768
+    },
+
+    "diffusion": {
+      "type": "dit",
+      "cross_attention_cond_ids": ["clap"],
+      "config": {
+        "io_channels": 64,
+        "embed_dim": 1536,
+        "depth": 24,
+        "num_heads": 24,
+        "cond_token_dim": 768,
+        "global_cond_dim": 0,
+        "project_cond_tokens": false,
+        "transformer_type": "continuous_transformer"
+      }
+    },
+
+    "io_channels": 64
+  },
+
+  "training": {
+    "use_ema": true,
+    "log_loss_info": false,
+    "cfg_dropout_prob": 0.0,
+    "optimizer_configs": {
+      "diffusion": {
+        "optimizer": {
+          "type": "AdamW",
+          "config": {
+            "lr": 1e-4,
+            "betas": [0.9, 0.999],
+            "weight_decay": 1e-3
+          }
+        },
+        "scheduler": {
+          "type": "InverseLRHalfMix",
+          "config": {
+            "inv_gamma": 2000,
+            "power": 2.3,
+            "warmup": 0.99
+          }
+        }
+      }
+    },
+    "demo": {
+      "demo_every": 500,
+      "demo_steps": 150,
+      "num_demos": 4,
+      "demo_cond_from_batch": true,
+      "demo_cfg_scales": [1],
+      "display_audio_cond": false
+    }
+  }
+}

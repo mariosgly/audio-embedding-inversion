@@ -1,0 +1,17 @@
+name: encodec-cuda121
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - ffmpeg
+  - numpy<2
+  - pysoundfile
+  - pytorch=2.5.*
+  - torchaudio=2.5.*
+  - pytorch-cuda=12.1
+  - pip:
+      - encodec==0.1.1
+      - tqdm>=4.66

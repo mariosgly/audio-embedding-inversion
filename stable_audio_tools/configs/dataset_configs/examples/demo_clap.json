@@ -1,0 +1,13 @@
+{
+  "dataset_type": "audio_dir",
+  "datasets": [
+    {
+      "id": "demo_clap",
+      "path": "/path/to/audio",
+      "filelist": "/path/to/demo.txt",
+      "custom_metadata_module": "stable_audio_tools/configs/dataset_configs/custom_metadata/clap_md.py"
+    }
+  ],
+  "random_crop": true,
+  "drop_last": false
+}
