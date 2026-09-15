@@ -3,13 +3,6 @@
 Research code for training embedding-to-audio inversion models, derived from
 [Stability AI stable-audio-tools](https://github.com/Stability-AI/stable-audio-tools).
 
-## What is Included
-
-- Core `stable_audio_tools` training, data, model, and sampling code required by `train.py`.
-- Embedding feature extraction code for VGGish, CLAP, EnCodec, and ConvNeXt.
-- Base embedding-inversion model configs in `stable_audio_tools/configs/model_configs/emb2audio`.
-- Generic dataset config examples in `stable_audio_tools/configs/dataset_configs/examples`.
-- Attribution and modified-file notes for responsible reuse of the upstream repository.
 
 ## Installation
 
